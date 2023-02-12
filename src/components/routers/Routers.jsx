@@ -1,7 +1,8 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Login from "../Auth/Login";
-import Register from "../Auth/Register";
+// import Register from "../Auth/Register";
+import Register2 from "../Auth/Register2";
 import Landing from "../Layouts/Landing";
 
 export const Routers = () => {
@@ -10,7 +11,7 @@ export const Routers = () => {
       <Routes>
         <Route path="/" element={<Landing></Landing>}></Route>
         <Route path="/login" element={<Login></Login>}></Route>
-        <Route path="/register" element={<Register></Register>}></Route>
+        <Route path="/register" element={<Register2></Register2>} />
       </Routes>
     </>
   );

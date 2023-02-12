@@ -6,17 +6,16 @@
 //1.class base
 //to create class base component we have to fire a command rcc
 //2.function base3.pure component
-import React, { Component } from "react";
 
-export default class Footer extends Component {
-  render() {
-    return (
-      <>
-        <h5>&copy;www.knowledgehut.com {new Date().getFullYear()}</h5>
-      </>
-    );
-  }
-}
+// export default class Footer extends Component {
+//   render() {
+//     return (
+//       <>
+//         <h5>&copy;www.knowledgehut.com {new Date().getFullYear()}</h5>
+//       </>
+//     );
+//   }
+// }
 //export: can inform to the js that footer class can be accessed by the other pages/modules from client application
 //default: it will use the component name as a default export name
 //class: it will be a template to declare the code
@@ -24,3 +23,16 @@ export default class Footer extends Component {
 //extends: it will the inherit the properties and behaviours from the parent class called component
 //componens: its a predefine class which is declare by react to use its functionality in our existing component so that we use extends
 //render() : will help us to render the UT on the scrren. presentational stfff
+import React from "react";
+
+const Footer = (props) => {
+  return (
+    <>
+      <h5>
+        &copy;www.knowledgehut.com{props.appName} {new Date().getFullYear()}
+      </h5>
+    </>
+  );
+};
+
+export default Footer;

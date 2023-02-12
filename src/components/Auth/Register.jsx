@@ -97,7 +97,7 @@ export default class Register extends Component {
               <input
                 type="password"
                 placeholder="Confirm Password"
-                name="password2"
+                name="confirmPassword"
                 minLength="6"
                 value={confirmPassword}
                 onChange={this.onChange}
