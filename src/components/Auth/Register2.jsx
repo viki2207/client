@@ -1,13 +1,25 @@
 import React, { useState } from "react";
 import axios from "axios";
 import classnames from "classnames";
+import PropTypes from "prop-types";
+
+import { connect } from "react-redux";
+
+// action import
+import { register } from "../../redux/actions/authAction";
+import { Navigate } from "react-router";
 const initialState = {
-  name: "Abhi",
+  name: "v",
   email: "",
   password: "",
   confirmPassword: "",
 };
-const Register2 = () => {
+
+// rfcreduxp:
+// react function componet redux prop types.
+
+export const Register2 = ({ isAuthenticated, register }) => {
+  // (props) : we provided all actions and state props delcaration.
   const [formData, setFormData] = useState(initialState);
 
   const { name, email, password, confirmPassword } = formData;
@@ -15,42 +27,27 @@ const Register2 = () => {
 
   const [error, setError] = useState({});
   // to hold the error related messages from restthe rest api call.
-
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     // ...formData : spread operator.
 
     //this.setState({ [e.target.name]: e.target.value });
   };
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard"></Navigate>;
+  }
   const onSubmit = (e) => {
     e.preventDefault();
     if (password === confirmPassword) {
       console.log(JSON.stringify(formData));
-      axios
-        .post("/api/users", { name, email, password })
-        .then((res) => console.log(JSON.stringify(res)))
-        .catch((err) => {
-          const errorObj = {};
-          console.error(JSON.stringify(err.response.data.errors));
-          err.response.data.errors.forEach((element) => {
-            console.log({ msg: element.msg, field: element.param });
-            if (element.param == "email") errorObj.email = element.msg;
-            if (element.param == "password") errorObj.password = element.msg;
-          });
-          setError({ ...errorObj });
-          //this.setState({ errors: errorObj });
-        });
-      console.log("hello from register form");
-    } else {
-      const errorObj = {};
-      errorObj.confirmPassword = "password did not match";
-      setError({ ...errorObj });
+
+      register({ name, email, password });
     }
   };
   return (
     <>
       <section class="container">
-        <h1 class="large text-primary">Sign Up for Devconnector</h1>
+        <h1 class="large text-primary">Sign Up for </h1>
         <p class="lead">
           <i class="fas fa-user"></i> Create Your Account
         </p>
@@ -119,4 +116,21 @@ const Register2 = () => {
   );
 };
 
-export default Register2;
+Register2.propTypes = {
+  register: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
+};
+// PropTypes : we will define the types of our used props in our component
+
+const mapStateToProps = (state) => ({
+  // state : global state / app state / store
+  isAuthenticated: state.authReducer.isAuthenticated,
+});
+// map your props with store content
+
+const mapDispatchToProps = {
+  register,
+};
+// we will list out all the actions consumed by the component.
+
+export default connect(mapStateToProps, mapDispatchToProps)(Register2);
