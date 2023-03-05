@@ -2,12 +2,17 @@
 // login
 // loading current user
 import axios from "axios";
-import { REGISTER_SUCCESS } from "../types";
+import { REGISTER_SUCCESS, USER_LOADED, USER_ERROR, LOGOUT } from "../types";
 import { setAlert } from "./alertAction";
+import api from "../../../src/utils/api";
+export const logout = () => ({ type: LOGOUT });
 export const loadUser = () => async (dispatch) => {
   try {
-    const res = await axios.get(); // we have to provide the token?
-  } catch (err) {}
+    const res = await api.get("/auth"); // we have to provide the token?
+    dispatch({ type: USER_LOADED, payload: res.data });
+  } catch (err) {
+    dispatch({ type: USER_ERROR });
+  }
 };
 export const register =
   ({ name, email, password }) =>
@@ -22,8 +27,9 @@ export const register =
     const data = JSON.stringify({ name, email, password });
     try {
       console.log(data);
-      const res = await axios.post("/api/users", data, config);
+      const res = await api.post("/users", data, config);
       dispatch({ type: REGISTER_SUCCESS, payload: res.data });
+      loadUser();
     } catch (err) {
       const errors = err.response.data.errors;
       if (errors) {

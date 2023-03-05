@@ -1,4 +1,4 @@
-import { USER_LOADED, REGISTER_SUCCESS, REGISTER_FAIL } from "../types";
+import { USER_LOADED, REGISTER_SUCCESS, REGISTER_FAIL, LOGOUT } from "../types";
 //it is used to hold and manipulate the user related states in the store
 //we are perform all auth related operations / user related operations like register, login, loading current info. etc
 const initialState = {
@@ -9,14 +9,23 @@ const initialState = {
 };
 //it will be a part of ur global state/ store we can hold all user related data.
 //global state its a store
+// eslint-disable-next-line import/no-anonymous-default-export
 export default (state = initialState, action) => {
   //action will share the data needs to be manaipulated it will share the flag
   //ont the basis of flag we need to the change store content
   //data : payload
   const { type, payload } = action;
   switch (type) {
+    case LOGOUT:
+      localStorage.removeItem("token");
+      return {
+        token: null,
+        isAuthenticated: null,
+        loading: true,
+        user: null,
+      };
     case USER_LOADED:
-      return { ...state };
+      return { ...state, isAuthenticated: true, loading: false, user: payload };
     case REGISTER_SUCCESS:
       //to handle the success part of user registerations
       //it will give us the token

@@ -1,50 +1,66 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
-import Header2 from "./Header2";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { logout } from "../../redux/actions/authAction";
 
-//import React from "react";
+const Header = ({ auth: { isAuthenticated }, logout }) => {
+  const authLinks = (
+    <ul>
+      <li>
+        <Link to="/profiles">Developers</Link>
+      </li>
+      <li>
+        <Link to="/posts">Posts</Link>
+      </li>
+      <li>
+        <Link to="/dashboard">
+          <i className="fas fa-user" />{" "}
+          <span className="hide-sm">Dashboard</span>
+        </Link>
+      </li>
+      <li>
+        <a onClick={logout} href="#!">
+          <i className="fas fa-sign-out-alt" />{" "}
+          <span className="hide-sm">Logout</span>
+        </a>
+      </li>
+    </ul>
+  );
 
-const Header = (props) => {
+  const guestLinks = (
+    <ul>
+      <li>
+        <Link to="/profiles">Developers</Link>
+      </li>
+      <li>
+        <Link to="/register">Register</Link>
+      </li>
+      <li>
+        <Link to="/login">Login</Link>
+      </li>
+    </ul>
+  );
+
   return (
-    <>
-      <Header2 appName={props.appName}></Header2>
-      <nav class="navbar bg-dark">
-        <h1>
-          <Link to="/" className="fas fa-code">
-            {props.appName}
-          </Link>
-          {/* <a href="/">
-              <i class="fas fa-code"></i> DevConnector
-            </a> */}
-        </h1>
-        <ul>
-          <li>
-            <a href="profile.html">Developers</a>
-          </li>
-
-          <li>
-            <Link to="/register">Register</Link>
-          </li>
-
-          {/* <li> */}
-          {/* <a href="register.html" title="Register">
-                <i class="fas fa-user"></i>
-                <span class="hide-sm">Register</span>
-              </a> */}
-          {/* <Link to="/register">Register</Link>
-            </li> */}
-
-          <li>
-            {/* <a href="login.html" title="Logout">
-                <i class="fas fa-sign-in-alt"></i>
-                <span class="hide-sm">Sign in</span>
-              </a> */}
-            <Link to="/login">Login</Link>
-          </li>
-        </ul>
-      </nav>
-    </>
+    <nav className="Header bg-dark">
+      <h1>
+        <Link to="/">
+          <i className="fas fa-code" /> DevConnector
+        </Link>
+      </h1>
+      <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
+    </nav>
   );
 };
 
-export default Header;
+Header.propTypes = {
+  logout: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  auth: state.authReducer,
+});
+
+export default connect(mapStateToProps, { logout })(Header);
